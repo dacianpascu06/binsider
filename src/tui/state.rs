@@ -354,22 +354,24 @@ impl<'a> State<'a> {
                 }
             }
             Command::HumanReadable => {
-                self.analyzer.elf.set_human_readable();
-                self.list = SelectableList::with_items(
-                    self.analyzer
-                        .elf
-                        .info(&ELF_INFO_TABS[self.info_index])
-                        .items()
-                        .into_iter()
-                        .filter(|items| {
-                            self.input.value().is_empty()
-                                || items.iter().any(|item| {
-                                    item.to_lowercase()
-                                        .contains(&self.input.value().to_lowercase())
-                                })
-                        })
-                        .collect(),
-                );
+                if self.tab == Tab::StaticAnalysis {
+                    self.analyzer.elf.set_human_readable();
+                    self.list = SelectableList::with_items(
+                        self.analyzer
+                            .elf
+                            .info(&ELF_INFO_TABS[self.info_index])
+                            .items()
+                            .into_iter()
+                            .filter(|items| {
+                                self.input.value().is_empty()
+                                    || items.iter().any(|item| {
+                                        item.to_lowercase()
+                                            .contains(&self.input.value().to_lowercase())
+                                    })
+                            })
+                            .collect(),
+                    );
+                }
             }
             Command::Nothing => {}
         }
